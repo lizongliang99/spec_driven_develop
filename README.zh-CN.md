@@ -1,45 +1,125 @@
 [English](./README.md) | **中文**
 
+[![GitHub stars](https://img.shields.io/github/stars/zhu1090093659/spec_driven_develop?style=social)](https://github.com/zhu1090093659/spec_driven_develop/stargazers)
+[![Forks](https://img.shields.io/github/forks/zhu1090093659/spec_driven_develop?style=social)](https://github.com/zhu1090093659/spec_driven_develop/fork)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Claude%20Code%20%7C%20Codex%20%7C%20Cursor-FF6B6B.svg)](https://github.com)
+
+## 目录
+
+- [它做什么](#它做什么)
+- [Deep Discuss — 结构化深度讨论](#deep-discuss--结构化深度讨论)
+- [S.U.P.E.R — 架构骨架](#super--架构骨架)
+- [平台兼容性](#平台兼容性)
+- [安装](#安装)
+- [使用方法](#使用方法)
+- [项目结构](#项目结构)
+- [友情链接](#友情链接)
+- [许可证](#许可证)
+
 # Spec-Driven Develop
 
-**一个 Markdown 文件，任意 Coding Agent，完整的开发前自动化流程。**
+**给 AI Coding Agent 的结构化方法论。纯 Markdown。全平台通用。架构优先。**
 
-Spec-Driven Develop 是一个平台无关的 AI Agent 技能，专门为大规模复杂任务自动化"开发前准备"流程。它不是框架，不是运行时，不是包管理器——它就是一个 `SKILL.md` 文件，教会**任何** AI Coding Agent 一套结构化的工作方法论。
+Spec-Driven Develop 是一个平台无关的 AI Agent 插件，包含两个互补的技能：
 
-核心机制极其简单：你的 Agent 读取一个包含结构化指令的 Markdown 文件，然后照着执行。没有 SDK，没有 API 集成，没有平台特定的 Hook。只要你的 Coding Agent 能读 Markdown——它们都能——就能用。
+- **Spec-Driven Develop** — 为大规模复杂任务自动化完整的开发前流水线：深度项目分析、分阶段任务分解、文档驱动的进度追踪、任务专属 sub-SKILL 生成——一切都在写第一行业务代码之前完成。
+- **Deep Discuss** — 结构化深度讨论工作流，用于问题分析、头脑风暴和方案设计，通过有纪律的多阶段思考确保讨论质量。
 
-当你对 Agent 说出"把这个项目用 Rust 重写"或者"迁移到微服务架构"这样的话时，它会在动手写代码之前，自动执行一套标准化的准备流水线：
+没有 SDK。没有运行时。没有依赖。只有任何 AI Coding Agent 都能读取并执行的 Markdown 文件。
 
-1. 深度项目分析
-2. 任务分解与规划
-3. 进度追踪文档生成
-4. 针对每个子任务生成专属 sub-SKILL
-5. 以文档驱动的方式进行迭代开发，全程保持进度感知
+## 它做什么
 
-一个主进度文件（`docs/progress/MASTER.md`）充当 Agent 跨对话的"记忆锚点"，不管对话切换多少次，都不会丢失当前进展。
+当你对 Agent 说"把这个项目用 Rust 重写"或"迁移到微服务架构"时，Spec-Driven Develop 会启动一条 7 阶段的准备流水线：
 
-## 为什么不用 Superpowers / oh-my-claude / ...？
+```
+Phase 0  快速意图捕获              捕获高层方向（1-2 句话）
+    |
+Phase 1  深度分析                  分析架构、盘点模块、评估风险
+    |                              —— 附带 S.U.P.E.R 架构健康度评估
+    |
+Phase 2  意图精炼                  基于分析结果提出针对性问题，
+    |                              确认范围、优先级和约束条件
+    |
+Phase 3  任务分解                  拆分为阶段、任务、并行泳道
+    |                              —— 每个任务标注 S.U.P.E.R 设计驱动原则
+    |
+Phase 4  进度追踪                  生成 MASTER.md + 逐阶段明细文件
+    |                              用于跨对话连续性
+    |
+Phase 5  Sub-SKILL 生成            创建项目级 SKILL，内联完整
+    |                              S.U.P.E.R 原则和代码审查清单
+    |
+Phase 6  交接                      展示所有产出物，确认就绪
+    |
+   ...   开发阶段                  带进度追踪的迭代实现
+    |
+Phase 7  归档                      保存所有工件以便溯源
+```
 
-Claude Code 生态里现在已经有了不少重量级选手：几十个 Agent 的编排系统、多阶段流水线、强制性的开发方法论。它们很强大——但也很重，而且把你锁死在单一平台上。
+一个主进度文件（`docs/progress/MASTER.md`）充当 Agent 跨对话的记忆锚点。不管任务跨越多少轮对话，Agent 始终知道当前进展。
 
-| | Spec-Driven Develop | Superpowers | oh-my-claudecode |
-|---|---|---|---|
-| **本质** | 一个 SKILL 文件 | 完整的技能框架 + 方法论 | 多 Agent 编排系统 |
-| **核心体积** | 1 个 Markdown 文件（约 200 行） | 插件 + 多个 Skill、Agent、Hook | 插件 + 32 个以上专用 Agent |
-| **外部依赖** | 无 | 依赖 Claude Code 插件系统 | 依赖 Claude Code 插件系统 |
-| **方法论** | 文档驱动的规划 | 强制 TDD（RED-GREEN-REFACTOR） | Team 模式多 Agent 委派 |
-| **跨平台** | 任何能读 Markdown 的 Agent | Claude Code（主要） | 仅 Claude Code |
-| **设计哲学** | 只做一件事，做到极致 | 完整的软件开发方法论 | 并行多 Agent 编排 |
+## Deep Discuss — 结构化深度讨论
 
-Spec-Driven Develop 走了一条截然不同的路：它不是用框架把你的 Agent 包裹起来，而是通过一个纯 Markdown 文件交给 Agent 一套方法论。没有 Hook，没有运行时开销，没有强制工作流。你始终保有完全的控制权。
+当你描述一个问题现象、技术困惑，或者说"讨论一下"、"帮我分析"、"我在纠结"时，Deep Discuss 会启动一个 7 阶段的结构化讨论流程：
 
-**轻量不等于简陋。** 一个结构良好的 Markdown 文件，能承载出乎意料的复杂工作流——项目分析、分阶段任务分解、进度追踪、子 SKILL 生成——全部不需要一行可执行代码。Agent 读取指令，然后执行。就这么简单。这种简单本身就是最大的特性。
+```
+Phase 1  接收信息                   倾听、复述、确认理解
+    |
+Phase 2  问题审查                   验证问题是否成立、信息是否充足、
+    |                              挖掘隐藏问题（批判性思维）
+    |
+Phase 3  深度分析                   多角度根因分析，
+    |                              明确标注置信度
+    |
+Phase 4  方案设计                   2-3 个可选方案 + trade-off 对比 + 推荐
+    |
+Phase 5  方案自检                   主动对自己的方案做第一轮 review
+    |
+Phase 6  最终确认                   完整性检查、风险预案、验证方式
+    |
+Phase 7  执行（可选）               仅在用户明确说"开始"时才进入
+```
 
-这让它特别适合以下场景：
+核心理念：**不急于给答案，先把问题想透。** Phase 2 是最关键的质量门控——如果信息不足，流程会暂停并要求补充，而不是带着假设往下走。
 
-- **已有成熟工作流的团队**，只是在大型任务前需要一个结构化的规划环节
-- **多平台用户**，不想被锁死在某个特定的 Agent 生态里
-- **想要掌控感的开发者**，而不是被一个黑盒流水线决定该怎么写代码
+## S.U.P.E.R — 架构骨架
+
+S.U.P.E.R 不是附录——它是驱动整个工作流每个阶段、以及 Agent 产出的每一行代码的设计哲学。
+
+> 写代码就像搭乐高——每块积木只干一件事，接口标准，方向明确，到哪都能跑，随时可以换。
+
+| 原则 | 含义 | 如何强制执行 |
+|:-----|:-----|:-------------|
+| **S**ingle Purpose | 一个模块，一个职责 | 分析阶段对每个模块的单一职责进行合规评分。横跨多个关注点的任务会被进一步拆解。 |
+| **U**nidirectional Flow | 数据单向流动 | 架构健康检查标记循环依赖。依赖必须向内指——外层依赖内层，反向绝不允许。 |
+| **P**orts over Implementation | 先定契约再写实现 | 模块盘点评估 I/O 是否有 schema 定义。任务分解要求接口契约先于实现任务。 |
+| **E**nvironment-Agnostic | 到哪都能跑 | 风险评估捕获硬编码配置和平台特定假设。配置必须来自环境变量或配置文件。 |
+| **R**eplaceable Parts | 换件不波及全局 | 每个模块按替换成本评分。如果替换一个组件导致连锁变更，说明架构有问题。 |
+
+### S.U.P.E.R 在哪里生效
+
+S.U.P.E.R 不是一个 Agent "可能会读"的参考文档——它被织入工作流的每一层：
+
+- **Phase 1 — 分析**：每个模块获得逐原则合规评分（`S🟢 U🟡 P🔴 E🟢 R🟡`）。风险评估包含 S.U.P.E.R 架构健康度汇总和违规热点。
+- **Phase 2 — 意图精炼**：分析结果呈现给用户，帮助他们在任务分解之前做出关于范围和 S.U.P.E.R 优先级的知情决策。
+- **Phase 3 — 规划**：每个任务标注其 S.U.P.E.R 设计驱动原则（该任务最需要关注哪些原则）。早期阶段优先修复违规热点，再构建新功能。
+- **Phase 5 — Sub-SKILL**：完整的 S.U.P.E.R 五原则被**逐字内联**到生成的 sub-SKILL 中（不是仅引用文件），同时包含一个强制性的 **10 项代码审查清单**，Agent 在每个任务完成后必须通过：
+
+  | 检查项 | 原则 |
+  |:-------|:-----|
+  | 每个新模块/文件只有一个职责 | S |
+  | 没有函数做了不止一件概念上的事 | S |
+  | 数据流向 input → processing → output，无反向依赖 | U |
+  | 没有引入循环导入 | U |
+  | 跨模块接口有 schema 定义（类型/契约） | P |
+  | 模块 I/O 可序列化 | P |
+  | 没有硬编码的路径、URL、密钥或配置值 | E |
+  | 所有新依赖都显式声明在依赖文件中 | E |
+  | 新模块可以被替换而不影响其他模块 | R |
+  | 变更后所有测试通过 | — |
+
+  **全部通过 = 继续。1-2 项失败 = 修复后再标记完成。3 项以上失败 = 停下来重构。**
 
 ## 平台兼容性
 
@@ -47,11 +127,11 @@ SKILL 的 prompt 以通用、平台中立的方式编写。在缺少某些能力
 
 **已测试并提供安装脚本的平台：**
 
-- **Claude Code** -- 以插件形式安装（支持增强的 Agent/命令能力）
-- **Codex (OpenAI)** -- 以 Skill 形式安装
-- **Cursor** -- 以全局或项目级 Skill 形式安装
+- **Claude Code** — 以插件形式安装（支持增强的 Agent/命令能力）
+- **Codex (OpenAI)** — 以 Codex 插件形式安装，或直接以 Skill 形式安装
+- **Cursor** — 以全局或项目级 Skill 形式安装
 
-**其他任意 Agent** -- 把 `SKILL.md` 复制到你的 Agent 读取指令的位置就行了。这个文件没有任何外部依赖，没有任何平台特定逻辑。Windsurf、Cline、Aider、Continue、Roo Code、Augment，或者其他任何能读 Markdown 技能/系统提示词的 Coding Agent，都能直接使用。
+**其他任意 Agent** — 把 `SKILL.md`（如果需要完整的模板和协议支持，再加上 `references/` 目录）复制到你的 Agent 读取指令的位置。这些文件没有外部依赖，没有平台特定逻辑。Windsurf、Cline、Aider、Continue、Roo Code、Augment，或其他任何能读 Markdown 技能/系统提示词的 Coding Agent，都能直接使用。
 
 ## 安装
 
@@ -66,9 +146,24 @@ SKILL 的 prompt 以通用、平台中立的方式编写。在缺少某些能力
 
 ### Codex CLI
 
-在 Codex 会话中使用内置的 Skill 安装器：
+本仓库已经包含 Codex 插件元数据：`.agents/plugins/marketplace.json` 和 `plugins/spec-driven-develop/.codex-plugin/plugin.json`。
 
+从 GitHub 安装 Codex 插件市场：
+
+```bash
+codex plugin marketplace add zhu1090093659/spec_driven_develop --ref main
 ```
+
+然后在 Codex 插件 UI 里启用 `Spec-Driven Develop`。如果你的 Codex 客户端暂时没有展示插件 UI，可以手动把下面内容加入 `~/.codex/config.toml`：
+
+```toml
+[plugins."spec-driven-develop@spec-driven-develop"]
+enabled = true
+```
+
+备选方式：在 Codex 会话中使用内置的 Skill 安装器，只安装核心 Skill：
+
+```text
 $skill-installer install https://github.com/zhu1090093659/spec_driven_develop/tree/main/plugins/spec-driven-develop/skills/spec-driven-develop
 ```
 
@@ -93,7 +188,7 @@ bash spec_driven_develop/scripts/install-cursor.sh
 
 ### 其他 Agent（通用方式）
 
-对于其他任何 Coding Agent，只需要拿到 SKILL 文件，放到你的 Agent 读取指令的地方：
+对于其他任何 Coding Agent，拿到 SKILL 文件，放到 Agent 读取指令的位置：
 
 ```bash
 # 下载 SKILL.md
@@ -110,21 +205,27 @@ curl -sL https://raw.githubusercontent.com/zhu1090093659/spec_driven_develop/mai
 | Continue | `.continue/` 配置或系统提示词 |
 | 其他 | 你的 Agent 读取自定义指令或系统提示词的任何位置 |
 
-如果你的 Agent 没有正式的"技能"目录，可以直接把 `SKILL.md` 的内容粘贴到它的系统提示词或自定义指令字段里——效果是一样的。
+如果你的 Agent 没有正式的"技能"目录，可以直接把 `SKILL.md` 的内容粘贴到它的系统提示词或自定义指令字段里——效果一样。
 
 ## 使用方法
 
 ### 自动触发
 
-直接向 Agent 描述你的大规模任务即可，Skill 会根据以下关键词自动触发：
+直接向 Agent 描述你的任务即可，不同的 Skill 会根据关键词自动触发：
 
-- 英文关键词：rewrite、migrate、overhaul、refactor entire project、transform、rebuild in [language]
-- 中文关键词：改造、重写、迁移、重构、大规模
+**Spec-Driven Develop** — 大规模改造任务：
+- 英文：rewrite、migrate、overhaul、refactor entire project、transform、rebuild in [language]
+- 中文：改造、重写、迁移、重构、大规模
+
+**Deep Discuss** — 问题分析与头脑风暴：
+- 英文：let's discuss、help me analyze、I have a problem、what do you think、I'm torn between
+- 中文：讨论一下、帮我分析、我遇到一个问题、你觉得怎么样、帮我想想、我在纠结
 
 ### 手动触发（Claude Code）
 
 ```
 /spec-dev rewrite this Python project in Rust
+/dp 我们的 API 响应时间最近突然变慢了
 ```
 
 ### 跨对话连续性
@@ -133,7 +234,7 @@ curl -sL https://raw.githubusercontent.com/zhu1090093659/spec_driven_develop/mai
 
 ### 原生任务追踪
 
-Agent 在每次工作会话开始时，会自动把当前阶段的待办任务加载到平台原生的任务追踪工具中（例如 Claude Code 的 TodoWrite）。你可以直接在 IDE 侧边栏里看到实时进度，不需要手动翻 Markdown 文件。MASTER.md 依然是跨对话的持久化真相源，原生工具负责的是会话内的即时可视化。
+Agent 在每次工作会话开始时，会自动把当前阶段的待办任务加载到平台原生的任务追踪工具中（例如 Claude Code 的 TodoWrite）。你可以直接在 IDE 侧边栏里看到实时进度，不需要手动翻 Markdown 文件。MASTER.md 依然是跨对话的持久化真相源，原生工具负责会话内的即时可视化。
 
 ### 进度导出
 
@@ -143,48 +244,42 @@ Agent 在每次工作会话开始时，会自动把当前阶段的待办任务�
 python scripts/export-progress.py docs/progress/
 ```
 
-输出包含项目元数据、每个阶段的任务明细，以及整体完成度汇总。
-
 ### 归档
 
-当主进度文件中的所有任务都标记为完成后，Agent 会进入归档模式：它会把所有工作产出物（分析文档、计划文档、进度记录，以及子 SKILL 的副本）移动到 `docs/archives/<项目名>/` 目录下，并更新 `docs/archives/README.md` 索引文件。不会删除任何东西，全部保留以便后续溯源。
-
-## 架构哲学：S.U.P.E.R
-
-这个 Skill 本身，以及它指导 Agent 产出的所有代码，都遵循 **S.U.P.E.R** 设计哲学：
-
-| 原则 | 含义 | 实践体现 |
-|:-----|:-----|:---------|
-| **S**ingle Purpose | 一个模块，一个职责 | 每个 reference 文件、模板、Agent 只处理一个关注点 |
-| **U**nidirectional Flow | 数据单向流动 | Phase 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6，无反向依赖 |
-| **P**orts over Implementation | 先定契约再写实现 | 模板作为阶段和 Agent 之间的端口定义 |
-| **E**nvironment-Agnostic | 到哪都能跑 | 纯 Markdown，不锁平台，自动优雅降级 |
-| **R**eplaceable Parts | 换件不波及全局 | 改一个模板、一个协议或一个 Agent，不用动其余部分 |
-
-完整的哲学文档以 `references/super-philosophy.md` 的形式打包在 Skill 中，并会自动嵌入到每个生成的子 SKILL 里，让开发阶段的 Agent 在写代码时也自觉遵循这套原则。
+当所有任务标记完成后，Agent 会把所有工作产出物（分析文档、计划文档、进度记录、sub-SKILL）归档到 `docs/archives/<项目名>/`，并更新 `docs/archives/README.md` 索引。不会删除任何东西，全部保留以便溯源。
 
 ## 项目结构
 
 ```
 spec_driven_develop/
-├── plugins/spec-driven-develop/              # 独立的 Claude Code 插件
-│   ├── skills/spec-driven-develop/
-│   │   ├── SKILL.md                          # 核心——全平台通用
-│   │   └── references/
-│   │       ├── super-philosophy.md           # S.U.P.E.R 架构原则
-│   │       ├── parallel-protocol.md          # 并行执行协议
-│   │       ├── behavioral-rules.md           # 不可违反的工作流规则
-│   │       └── templates/                    # 文档模板（按关注点拆分）
-│   │           ├── analysis.md
-│   │           ├── plan.md
-│   │           ├── progress.md
-│   │           ├── archive.md
-│   │           └── sub-skill.md
+├── .agents/plugins/marketplace.json          # Codex 仓库级插件市场入口
+├── plugins/spec-driven-develop/              # 独立的 Claude Code 与 Codex 插件
+│   ├── .claude-plugin/
+│   │   └── plugin.json                       # Claude Code 插件清单
+│   ├── .codex-plugin/
+│   │   └── plugin.json                       # Codex 插件清单
+│   ├── skills/
+│   │   ├── spec-driven-develop/
+│   │   │   ├── SKILL.md                      # 核心工作流——全平台通用
+│   │   │   └── references/
+│   │   │       ├── super-philosophy.md       # S.U.P.E.R 架构原则
+│   │   │       ├── parallel-protocol.md      # 并行执行协议
+│   │   │       ├── behavioral-rules.md       # 不可违反的工作流规则
+│   │   │       └── templates/                # 文档模板（按关注点拆分）
+│   │   │           ├── analysis.md           # Phase 1：含 S.U.P.E.R 健康度评估
+│   │   │           ├── plan.md               # Phase 3：含 S.U.P.E.R 设计约束
+│   │   │           ├── progress.md           # Phase 4：跨对话进度追踪
+│   │   │           ├── archive.md            # Phase 7：工件归档
+│   │   │           └── sub-skill.md          # Phase 5：含内联 S.U.P.E.R + 审查清单
+│   │   └── deep-discuss/
+│   │       └── SKILL.md                      # 结构化深度讨论工作流
 │   ├── agents/                               # Claude Code 子 Agent（可选增强）
 │   │   ├── project-analyzer.md
 │   │   ├── task-architect.md
 │   │   └── task-executor.md
-│   └── commands/spec-dev.md                  # /spec-dev 斜杠命令（Claude Code）
+│   └── commands/                             # 斜杠命令（Claude Code）
+│       ├── spec-dev.md                       # /spec-dev — 启动规范驱动工作流
+│       └── dp.md                             # /dp — 启动深度讨论
 ├── scripts/                                  # 安装与工具脚本
 │   ├── install-cursor.sh
 │   ├── install-codex.sh
@@ -193,7 +288,7 @@ spec_driven_develop/
 └── LICENSE
 ```
 
-跨平台使用唯一需要关心的文件就是 `SKILL.md`。其他的东西——agents、commands、插件清单——都是 Claude Code 平台上的锦上添花。
+跨平台使用的核心文件是各 `SKILL.md` 文件和 `references/` 目录。其他的——agents、commands、插件清单、marketplace 元数据——都是 Claude Code 或 Codex 平台上的增强功能。
 
 ## Star History
 
